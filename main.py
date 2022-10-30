@@ -105,12 +105,17 @@ while cont:
       except:
         input('Invalid input. Please try again. \n[Enter] to continue')
     t.color(0, 0, 0)
-    x_s = (-b + (b**2 + 4*200*a - 4*a*c)**0.5)/(2*a)
+    if a < 0:
+      x_s = (-b + (b**2 + 4*200*(-a) - 4*a*c)**0.5)/(2*a)
+      t.goto(x_s, -200)
+    else:
+      x_s = -((-b + (b**2 + 4*200*a - 4*a*c)**0.5)/(2*a))
+      t.goto(x_s, 200)
+    # x_s = (-b + (b**2 + 4*200*a_s - 4*a*c)**0.5)/(2*a)
     print(x_s)
     t.penup()
-    t.goto(-x_s, 200)
     x_s = rnd(x_s)*20
-    for x in range(-x_s, x_s, 1):
+    for x in range(x_s, -x_s):
       x /= 10
       y = a * (x ** 2) + b * x + c
       if y >= -200 and y <= 200:
