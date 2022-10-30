@@ -1,4 +1,5 @@
 import turtle as t
+import math
 t.getcanvas().winfo_toplevel().attributes("-fullscreen", True)
 t.colormode(255)
 t.speed(0)
@@ -39,7 +40,19 @@ def grid():
   t.forward(200)
   t.backward(400)
   t.width(1)
+  t.penup()
 grid()
+def polartorect(r, theta):
+  x = r*math.cos(theta)
+  y = r*math.sin(theta)
+  return (x,y)
+def rnd(x):
+  x_int = int(x)
+  x_frac = x - x_int
+  if x_frac == 0.5:
+    return round(x) + 1
+  else:
+    return round(x)
 cont = True
 while cont:
   eq_type = input('What type of equation would you like to graph?\n[1] Linear Equation (Form: y = mx + b)\n[2] Quadratic Equation (Form: y = ax² + bx + c)\n> ')
@@ -48,10 +61,12 @@ while cont:
     b = float(input('y = mx + \033[1mb\033[0m    (Y-Intercept)\n> '))
     t.penup()
     t.width(2)
-    t.goto(-200, (m *(-200) + b))
+    num = (-200-b)/m
+    t.goto(num, (m * num + b))
     t.pendown()
     t.color(0,0,0)
-    t.goto(200, (m * (200) + b))
+    num = (200-b)/m
+    t.goto(num, (m * num + b))
     if b == 0 or m == 0:
       x_inter = 0
     else:
@@ -90,13 +105,17 @@ while cont:
       except:
         input('Invalid input. Please try again. \n[Enter] to continue')
     t.color(0, 0, 0)
-    for x in range(-2000, 2000, 1):
+    x_s = (-b + (b**2 + 4*200*a - 4*a*c)**0.5)/(2*a)
+    print(x_s)
+    t.penup()
+    t.goto(-x_s, 200)
+    x_s = rnd(x_s)*20
+    for x in range(-x_s, x_s, 1):
       x /= 10
       y = a * (x ** 2) + b * x + c
       if y >= -200 and y <= 200:
-        t.penup()
-        t.goto(x, y)
-        t.dot(2)
+        t.pendown()
+        t.goto(x, y) 
         print(x, y)
       else:
         pass
@@ -116,7 +135,7 @@ while cont:
     if cmplx:
       cmplx -= 1
       new_x_inter2 = x_inter2.replace('j', '\033[1mi\033[0m')
-      x_inter2 = f'{new_x_inter2}\n(The \033[1mi\033[0m is a complex number (√(-1)))'
+      x_inter2 = f'{new_x_inter2}\n(The \033[1mi\033[0m is a complex number (√-1))'
     print(f'Equation: {a}x² + {b}x + {c}\nRoots: {x_inter1}, and {x_inter2}\ny-intercept: {c}\n{minormax}')
     cont1 = input('Would you like to graph another equation? [y, n]\n> ')
     if cont1 == 'y':
